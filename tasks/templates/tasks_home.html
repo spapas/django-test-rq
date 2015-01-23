@@ -1,0 +1,14 @@
+<html>
+<form method='POST'>
+    {% csrf_token %}
+    {{ form }}
+    <input type='submit' value='ok' />
+</form>
+<hr />
+<table>
+{% for task in tasks %}
+    <tr>
+        <td>{{ task.id }}</td><td>{{ task.name }}</td><td>{{ task.job_id }}</td><td>{{ task.result }}</td>
+    </tr>
+{% endfor %}
+</html>
