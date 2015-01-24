@@ -1,4 +1,5 @@
-<html>
+{% extends "base.html" %}
+{% block content %}
 <form method='POST'>
     {% csrf_token %}
     {{ form }}
@@ -8,7 +9,9 @@
 <table>
 {% for task in tasks %}
     <tr>
-        <td>{{ task.id }}</td><td>{{ task.name }}</td><td>{{ task.job_id }}</td><td>{{ task.result }}</td>
+        <td>{{ task.id }}</td><td>{{ task.name }}</td>
+        <td><a href="{% url 'view_job' task.job_id %}" >{{ task.job_id }}</a></td>
+        <td>{{ task.result }}</td><td>{{ task.created_on }}</td>
     </tr>
 {% endfor %}
-</html>
+{% endblock %}
