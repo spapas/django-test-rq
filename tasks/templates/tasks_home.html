@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Tasks</h1>
+<h3>Tasks</h3>
 <div class="row">
     <div class="twelve columns">
         <form method='POST'>
@@ -13,8 +13,8 @@
 <hr />
 <div class="row">
     <div class="six columns">
-        <h2>Tasks</h2>
-        <table class="">
+        <h4>Tasks</h4>
+        <table>
             <thead><tr><th>Url</th><th>Job</th><th>Result</th><th>Date</th></tr></thead>
             <tbody>
                 {% for task in tasks %}
@@ -28,8 +28,8 @@
         </table>
     </div>
     <div class="six columns">
-        <h2>Scheduled Tasks</h2>
-        <table class="">
+        <h4>Scheduled Tasks</h4>
+        <table>
             <thead><tr><th>Url</th><th>Job</th><th>Instances</th></tr></thead>
             <tbody>
                 {% for task in scheduled_tasks %}
