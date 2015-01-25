@@ -1,17 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-<form method='POST'>
-    {% csrf_token %}
-    {{ form }}
-    <input type='submit' value='ok' />
-</form>
+<h1>Tasks</h1>
+<div class="row">
+    <div class="twelve columns">
+        <form method='POST'>
+            {% csrf_token %}
+            {{ form }}<br />
+            <input type='submit' value='ok' />
+        </form>
+    </div>
+</div>
 <hr />
-<table>
-{% for task in tasks %}
-    <tr>
-        <td>{{ task.id }}</td><td>{{ task.name }}</td>
-        <td><a href="{% url 'view_job' task.job_id %}" >{{ task.job_id }}</a></td>
-        <td>{{ task.result }}</td><td>{{ task.created_on }}</td>
-    </tr>
-{% endfor %}
+<div class="row">
+    <div class="six columns">
+        <h2>Tasks</h2>
+        <table class="">
+            <thead><tr><th>Url</th><th>Job</th><th>Result</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td><a href="{% url 'view_job' task.job_id %}" >{{ task.job_id }}</a></td>
+                        <td>{{ task.result }}</td><td>{{ task.created_on|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="six columns">
+        <h2>Scheduled Tasks</h2>
+        <table class="">
+            <thead><tr><th>Url</th><th>Job</th><th>Instances</th></tr></thead>
+            <tbody>
+                {% for task in scheduled_tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td><a href="{% url 'view_job' task.job_id %}" >{{ task.job_id }}</a></td>
+                        <td>
+                        {% for ti in task.scheduledtaskinstance_set.all %}
+                            {{ ti.created_on|date:"d/m/Y H:i" }}: {{ ti.result }}<br />
+                        {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

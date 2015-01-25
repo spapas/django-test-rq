@@ -1,8 +1,8 @@
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from forms import TaskForm
-from tasks import work
-from models import Task
+from tasks import get_url_words, scheduled_get_url_words
+from models import Task,ScheduledTask
 from rq.job import Job
 import django_rq
 import datetime
@@ -18,18 +18,19 @@ class TasksHomeFormView(FormView):
             scheduler = django_rq.get_scheduler('default')
             job = scheduler.schedule(
                 scheduled_time=datetime.datetime.now(),
-                func=work,
+                func=scheduled_get_url_words,
                 args=[url],
-                interval=20,
-                repeat=100,
+                interval=100,
+                repeat=10,
             )
         else:
-            work.delay(url)
+            get_url_words.delay(url)
         return super(TasksHomeFormView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super(TasksHomeFormView, self).get_context_data(**kwargs)
-        ctx['tasks'] = Task.objects.all()
+        ctx['tasks'] = Task.objects.all().order_by('-created_on')
+        ctx['scheduled_tasks'] = ScheduledTask.objects.all().order_by('-created_on')
         return ctx
 
 
