@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-    {{ job }}
-    {% for j, k in job %}
-        {{ i }} = {{ k }}
+    <div class="row">
+        <div class="twelve columns">
+            <h3>Job {{ view.kwargs.job }} attributes</h3>
+        </div>
+    </div>
+    {% for key, val in job.items %}
+        <div class="row">
+            <div class="twelve columns">
+                {{ key }} = {{ val }}
+            </div>
+        </div>
     {% endfor %}
 {% endblock %}
