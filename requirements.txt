@@ -1,0 +1,5 @@
+Django==1.7.3
+django-rq==0.7.0
+redis==2.10.3
+rq==0.4.6
+rq-scheduler==0.5.0
