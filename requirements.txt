@@ -1,5 +1,6 @@
 Django==1.7.3
 django-extensions==1.4.9
+django-redis==3.8.2
 django-rq==0.7.0
 redis==2.10.3
 requests==2.5.1
