@@ -38,7 +38,7 @@
                         <td><a href="{% url 'view_job' task.job_id %}" >{{ task.job_id }}</a></td>
                         <td>
                         {% for ti in task.scheduledtaskinstance_set.all %}
-                            {{ ti.created_on|date:"d/m/Y H:i" }}: {{ ti.result }}<br />
+                            @{{ ti.created_on|date:"d/m/Y H:i" }}, result: {{ ti.result }}<br />
                         {% endfor %}
                         </td>
                     </tr>
