@@ -14,14 +14,17 @@ class TasksHomeFormView(FormView):
 
     def form_valid(self, form):
         url = form.cleaned_data['url']
-        if form.cleaned_data.get('scheduled'):
+        schedule_times = form.cleaned_data.get('schedule_times')
+        schedule_interval = form.cleaned_data.get('schedule_interval')
+        
+        if schedule_times and schedule_interval:
             scheduler = django_rq.get_scheduler('default')
             job = scheduler.schedule(
                 scheduled_time=datetime.datetime.now(),
                 func=scheduled_get_url_words,
                 args=[url],
-                interval=100,
-                repeat=10,
+                interval=schedule_interval,
+                repeat=schedule_times,
             )
         else:
             get_url_words.delay(url)
