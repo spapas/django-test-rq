@@ -108,12 +108,19 @@ RQ_SHOW_ADMIN_LINK = True
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
     },
+    
     'loggers': {
         'django.request': {
             'handlers': ['console'],
