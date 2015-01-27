@@ -5,30 +5,36 @@ from django_rq import job
 
 @job
 def get_url_words(url):
+    # This creates a Task instance to save the job instance and job result
     job = get_current_job()
 
-    t = Task.objects.create(
+    task = Task.objects.create(
         job_id=job.get_id(),
         name=url
     )
-    r = requests.get(url)
-    t.result = len(r.text)
-    t.save()
-    return t.result
+    response = requests.get(url)
+    task.result = len(response.text)
+    task.save()
+    return task.result
 
 
 @job
 def scheduled_get_url_words(url):
+    """
+    This creates a ScheduledTask instance for each group of 
+    scheduled task - each time this scheduled task is run
+    a new instance of ScheduledTaskInstance will be created
+    """
     job = get_current_job()
 
-    t, created = ScheduledTask.objects.get_or_create(
+    task, created = ScheduledTask.objects.get_or_create(
         job_id=job.get_id(),
         name=url
     )
-    r = requests.get(url)
-
+    response = requests.get(url)
+    response_len = len(response.text)
     ScheduledTaskInstance.objects.create(
-        scheduled_task=t,
-        result = len(r.text),
+        scheduled_task=task,
+        result = response_len,
     )
-    return len(r.text)
+    return response_len

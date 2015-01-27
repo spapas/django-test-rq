@@ -8,6 +8,13 @@ import django_rq
 import datetime
 
 class TasksHomeFormView(FormView):
+    """
+    A class that displays a form to read a url to read its contents and if the job
+    is to be scheduled or not and information about all the tasks and scheduled tasks.
+    
+    When the form is submitted, the task will be either scheduled based on the 
+    parameters of the form or will be just executed asynchronously immediately.
+    """
     form_class = TaskForm
     template_name = 'tasks_home.html'
     success_url = '/'
@@ -16,8 +23,9 @@ class TasksHomeFormView(FormView):
         url = form.cleaned_data['url']
         schedule_times = form.cleaned_data.get('schedule_times')
         schedule_interval = form.cleaned_data.get('schedule_interval')
-        
+
         if schedule_times and schedule_interval:
+            # Schedule the job with the form parameters
             scheduler = django_rq.get_scheduler('default')
             job = scheduler.schedule(
                 scheduled_time=datetime.datetime.now(),
@@ -27,6 +35,7 @@ class TasksHomeFormView(FormView):
                 repeat=schedule_times,
             )
         else:
+            # Just execute the job asynchronously
             get_url_words.delay(url)
         return super(TasksHomeFormView, self).form_valid(form)
 
@@ -38,6 +47,11 @@ class TasksHomeFormView(FormView):
 
 
 class JobTemplateView(TemplateView):
+    """ 
+    A simple template view that gets a job id as a kwarg parameter
+    and tries to fetch that job from RQ. It will then print all attributes
+    of that object using __dict__.
+    """
     template_name = 'job.html'
 
     def get_context_data(self, **kwargs):

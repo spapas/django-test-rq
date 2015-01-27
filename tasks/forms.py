@@ -1,6 +1,10 @@
 from django import forms
 
 class TaskForm(forms.Form):
+    """ A simple form to read a url from the user in order to find out its length
+    and either run it asynchronously or schedule it schedule_times times,
+    every schedule_interval seconds.
+    """
     url = forms.CharField(label='URL', max_length=128, help_text='Enter a url (starting with http/https) to start a job that will download it and count its words' )
     schedule_times = forms.IntegerField(required=False, help_text='How many times to run this job. Leave empty or 0 to run it only once.')
     schedule_interval = forms.IntegerField(required=False, help_text='How much time (in seconds) between runs of the job. Leave empty to run it only once.') 
