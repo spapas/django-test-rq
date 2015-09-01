@@ -1,9 +1,14 @@
-from django.views.generic.edit import FormView
+from django.conf import settings
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.views.generic.edit import FormView, CreateView
 from django.views.generic import TemplateView
 from forms import TaskForm
-from tasks import get_url_words, scheduled_get_url_words
-from models import Task,ScheduledTask
+from tasks import get_url_words, scheduled_get_url_words, long_runnig_task
+from models import Task, ScheduledTask, LongTask
 from rq.job import Job
+from rq import Worker, Queue
 import django_rq
 import datetime
 
@@ -11,8 +16,8 @@ class TasksHomeFormView(FormView):
     """
     A class that displays a form to read a url to read its contents and if the job
     is to be scheduled or not and information about all the tasks and scheduled tasks.
-    
-    When the form is submitted, the task will be either scheduled based on the 
+
+    When the form is submitted, the task will be either scheduled based on the
     parameters of the form or will be just executed asynchronously immediately.
     """
     form_class = TaskForm
@@ -46,8 +51,38 @@ class TasksHomeFormView(FormView):
         return ctx
 
 
+class LongTaskCreateView(CreateView):
+    """
+    A class that displays a form to start a long running task.
+
+    """
+    template_name = 'long_tasks.html'
+    model = LongTask
+    fields = ('name', 'duration', )
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LongTaskCreateView, self).get_context_data(**kwargs)
+        ctx['tasks'] = LongTask.objects.all().order_by('-created_on')
+        redis_conn = django_rq.get_connection('default')
+        ctx['queue'] = Queue(settings.DJANGO_TEST_RQ_LOW_QUEUE, connection=redis_conn)
+        
+        return ctx
+        
+    def form_valid(self, form, ):
+        redis_conn = django_rq.get_connection('default')
+        if len([x for x in Worker.all(connection=redis_conn) if settings.DJANGO_TEST_RQ_LOW_QUEUE in x.queue_names()]) == 0:
+            messages.add_message(self.request, messages.ERROR, 'No active workers for queue!')
+            return HttpResponseRedirect(reverse('long_tasks'))
+            
+        form.instance.result = 'QUEUED'
+        long_task = form.save()
+        long_runnig_task.delay(long_task)
+        messages.info(self.request, 'Long task started.')
+        return HttpResponseRedirect(reverse('long_tasks'))
+
+
 class JobTemplateView(TemplateView):
-    """ 
+    """
     A simple template view that gets a job id as a kwarg parameter
     and tries to fetch that job from RQ. It will then print all attributes
     of that object using __dict__.

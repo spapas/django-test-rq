@@ -16,6 +16,7 @@ INSTALLED_APPS = (
 
     'django_extensions',
     'django_rq',
+    'django_rq_dashboard',
 
     'tasks',
 )
@@ -64,7 +65,13 @@ RQ_QUEUES = {
     'default': {
         'USE_REDIS_CACHE': 'default',
     },
+    'django-test-rq-low': {
+        'USE_REDIS_CACHE': 'default',
+    },
 }
+
+DJANGO_TEST_RQ_LOW_QUEUE = 'django-test-rq-low'
+
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
@@ -100,3 +107,9 @@ LOGGING = {
         },
     },
 }
+
+try:
+    from .local import *
+except ImportError:
+    pass
+

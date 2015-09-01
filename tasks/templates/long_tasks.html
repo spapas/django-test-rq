@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Long Tasks</h3>
+<div class="row">
+    <div class="six columns">
+        <form method='POST'>
+            {% csrf_token %}
+            {{ form }}<br />
+            <input type='submit' value='ok' />
+        </form>
+    </div>
+    <div class="six columns">
+        Queue name: {{ queue.name }} <br />
+        Jobs length: {{ queue.jobs|length }}
+    </div>
+    
+</div>
+<hr />
+<div class="row">
+    <div class="twelve columns">
+        <h4>Long Tasks</h4>
+        <table>
+            <thead><tr><th>Url</th><th>Duration</th><th>Status</th><th>Prograss</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.duration }}</td>
+                        <td>{{ task.result }}</td>
+                        <td>{{ task.progress }}</td>
+                        <td>{{ task.created_on|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+{% endblock %}

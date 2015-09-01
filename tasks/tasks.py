@@ -1,7 +1,9 @@
 import requests
+import time
 from models import Task, ScheduledTask, ScheduledTaskInstance
 from rq import get_current_job
 from django_rq import job
+from django.conf import settings
 
 @job
 def get_url_words(url):
@@ -14,6 +16,26 @@ def get_url_words(url):
     )
     response = requests.get(url)
     task.result = len(response.text)
+    task.save()
+    return task.result
+    
+    
+@job(settings.DJANGO_TEST_RQ_LOW_QUEUE)
+def long_runnig_task(task):
+    job = get_current_job()
+    task.job_id = job.get_id()
+    
+    task.result = 'STARTED'
+    
+    duration_in_second_persentages = task.duration*1.0 / 100
+    for i in range(100):
+        import time
+        task.progress = i
+        task.save()
+        print task.progress
+        time.sleep(duration_in_second_persentages)
+    
+    task.result = 'FINISHED'
     task.save()
     return task.result
 

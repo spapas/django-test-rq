@@ -2,12 +2,15 @@
 {% block content %}
 <h3>Tasks</h3>
 <div class="row">
-    <div class="twelve columns">
+    <div class="six columns">
         <form method='POST'>
             {% csrf_token %}
             {{ form }}<br />
             <input type='submit' value='ok' />
         </form>
+    </div>
+    <div class="six columns">
+        <a href='{% url "long_tasks" %}'>Long tasks</a>
     </div>
 </div>
 <hr />

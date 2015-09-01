@@ -18,6 +18,9 @@
     </head>
 <body>
     <div class='container'>
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
         {% block content %}{% endblock %}
     </div>
 </body>
