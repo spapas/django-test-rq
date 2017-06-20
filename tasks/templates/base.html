@@ -8,7 +8,7 @@
             table {
                 font-size: 0.85em;
             }
-            
+
             td {
                 max-width: 140px;
             }
@@ -17,6 +17,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 <body>
+    <div class="nav">
+        <a href='/'>Home</a>
+        <a href='{% url "long_tasks" %}'>Long tasks</a>
+        <a href='/rq/'>Queues</a>
+        <a href='/admin/rq/'>RQ Dashboard</a>
+    </div>
     <div class='container'>
         {% for message in messages %}
             {{ message }}
