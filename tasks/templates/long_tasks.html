@@ -13,14 +13,14 @@
         Queue name: {{ queue.name }} <br />
         Jobs length: {{ queue.jobs|length }}
     </div>
-    
+
 </div>
 <hr />
 <div class="row">
     <div class="twelve columns">
         <h4>Long Tasks</h4>
         <table>
-            <thead><tr><th>Url</th><th>Duration</th><th>Status</th><th>Prograss</th><th>Date</th></tr></thead>
+            <thead><tr><th>Url</th><th>Duration</th><th>Status</th><th>Progress</th><th>Date</th></tr></thead>
             <tbody>
                 {% for task in tasks %}
                     <tr>
