@@ -3,10 +3,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = 'x)g1j9z(w*f*u&pn2^ds4^fjf)5-*h9t6#em)f-g7stqx72y7k'
 DEBUG = True
-TEMPLATE_DEBUG = True
+#TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -14,12 +14,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_extensions',
+    #'django_extensions',
     'django_rq',
     'django_rq_dashboard',
 
     'tasks',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -93,7 +93,7 @@ LOGGING = {
             'formatter': 'simple'
         },
     },
-    
+
     'loggers': {
         'django.request': {
             'handlers': ['console'],
@@ -107,6 +107,22 @@ LOGGING = {
         },
     },
 }
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 try:
     from .local import *
