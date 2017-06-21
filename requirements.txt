@@ -12,7 +12,7 @@
 
 Django==1.11.2
 requests==2.18.1
-django-redis-4.8.0
+django-redis==4.8.0
 django-rq==0.9.5
 rq-scheduler==0.7.0
-django-rq-dashboard-0.3.3
+django-rq-dashboard==0.3.3
