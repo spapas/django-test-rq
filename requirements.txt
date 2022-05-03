@@ -3,3 +3,5 @@ requests==2.27.1
 django-redis==5.2.0
 django-rq==2.5.1
 rq-scheduler==0.11.0
+-e git+https://github.com/michaelbrooks/rq-win.git#egg=rq-win
+
