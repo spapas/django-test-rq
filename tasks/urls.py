@@ -1,10 +1,9 @@
-from django.conf.urls import include, url
-from django.contrib import admin
-from views import TasksHomeFormView, JobTemplateView, LongTaskCreateView
+from django.urls import re_path
+from .views import TasksHomeFormView, JobTemplateView, LongTaskCreateView
 
 
 urlpatterns = [
-    url(r'^$', TasksHomeFormView.as_view(), name='home'),
-    url(r'^long/$', LongTaskCreateView.as_view(), name='long_tasks'),
-    url(r'^job/(?P<job>[\d\w-]+)/$', JobTemplateView.as_view(), name='view_job'),
+    re_path(r'^$', TasksHomeFormView.as_view(), name='home'),
+    re_path(r'^long/$', LongTaskCreateView.as_view(), name='long_tasks'),
+    re_path(r'^job/(?P<job>[\d\w-]+)/$', JobTemplateView.as_view(), name='view_job'),
 ]

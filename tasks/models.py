@@ -31,6 +31,6 @@ class ScheduledTask(models.Model):
 
 class ScheduledTaskInstance(models.Model):
     # A model to save information about instances of a scheduled task
-    scheduled_task = models.ForeignKey('ScheduledTask')
+    scheduled_task = models.ForeignKey('ScheduledTask', on_delete=models.PROTECT)
     created_on = models.DateTimeField(auto_now_add=True)
     result = models.CharField(max_length=128, blank=True, null=True)

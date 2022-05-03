@@ -1,16 +1,16 @@
 from django.conf import settings
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic import TemplateView
-from forms import TaskForm
-from tasks import get_url_words, scheduled_get_url_words, long_runnig_task
-from models import Task, ScheduledTask, LongTask
+from .forms import TaskForm
+from .tasks import get_url_words, scheduled_get_url_words, long_runnig_task
+from .models import Task, ScheduledTask, LongTask
 from rq.job import Job
 from rq import Worker, Queue
 import django_rq
-import datetime
+from django.utils import timezone
 
 class TasksHomeFormView(FormView):
     """
@@ -33,7 +33,7 @@ class TasksHomeFormView(FormView):
             # Schedule the job with the form parameters
             scheduler = django_rq.get_scheduler('default')
             job = scheduler.schedule(
-                scheduled_time=datetime.datetime.now(),
+                scheduled_time=timezone.now(),
                 func=scheduled_get_url_words,
                 args=[url],
                 interval=schedule_interval,

@@ -1,6 +1,6 @@
 import requests
 import time
-from models import Task, ScheduledTask, ScheduledTaskInstance
+from .models import Task, ScheduledTask, ScheduledTaskInstance
 from rq import get_current_job
 from django_rq import job
 from django.conf import settings
@@ -29,10 +29,9 @@ def long_runnig_task(task):
     
     duration_in_second_persentages = task.duration*1.0 / 100
     for i in range(100):
-        import time
         task.progress = i
         task.save()
-        print task.progress
+        print(task.progress)
         time.sleep(duration_in_second_persentages)
     
     task.result = 'FINISHED'
